@@ -1,20 +1,18 @@
 package com.example.sah.myweather;
 
 
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
-import android.support.v7.widget.RecyclerView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.widget.Toast;
 
-import com.example.sah.myweather.DB.DBHelper;
-import com.example.sah.myweather.DB.DBIcon;
+import com.example.sah.myweather.db.DBHelper;
+import com.example.sah.myweather.db.DBIcon;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,92 +23,84 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class MyTask extends AsyncTask<Void, Void, String> {
 
-    HttpURLConnection urlConnection = null;
-    BufferedReader reader = null;
-    String resultJson = "";
-
-    JSONObject dataJsonObj = null;
-    JSONObject dataWeatherJsonObj = null;
-    JSONObject dataTemperatureJsonObj = null;
-    JSONObject dataWindJsonObj = null;
-    JSONArray weatherJsonObj = null;
-    String data = "";
-    JSONObject dataCity = null;
-    JSONArray listJsonArray = null;
-    JSONObject tempJson = null;
-    String pressure = "";
-    String humidity = "";
-    String wind_speed = "";
-    String description = "";
-    String dt_txt = "";
-    String jsonWeather_temp = "";
-    String jsonCityName = "";
-    String dataMain = "";
-    String[] weatherList = new String[6];
-    SharedPreferences mSettings;
-
-
-    String icon;
-    String units, city, lang;
-
-
-    int ke = 0;
-
-    DBHelper dbHelper;
-    DBIcon dbIcon;
     public static final String APP_PREF = "mysettings";
     public static final String APP_PREF_UNITS = "units_format";
     public static final String APP_PREF_CITY = "cityname";
     public static final String APP_PREF_DB = "database";
     public static final String APP_PREF_LANG = "language";
-
+    private String icon;
+    private String units, city, lang;
+    private int ke = 0;
+    private DBHelper dbHelper;
+    private DBIcon dbIcon;
+    private ProgressDialog pd;
+    private HttpURLConnection urlConnection = null;
+    private BufferedReader reader = null;
+    private String resultJson = "";
+    private JSONObject dataJsonObj = null;
+    private JSONObject dataWeatherJsonObj = null;
+    private JSONObject dataTemperatureJsonObj = null;
+    private JSONObject dataWindJsonObj = null;
+    private JSONArray weatherJsonObj = null;
+    private String data = "";
+    private JSONObject dataCity = null;
+    private JSONArray listJsonArray = null;
+    private JSONObject tempJson = null;
+    private String pressure = "";
+    private String humidity = "";
+    private String wind_speed = "";
+    private String description = "";
+    private String dt_txt = "";
+    private String jsonWeather_temp = "";
+    private String jsonCityName = "";
+    private String dataMain = "";
+    private String[] weatherList = new String[6];
+    private SharedPreferences mSettings;
     private Context context;
 
-    public MyTask(Context context) {
-        this.context = context;
+
+    public MyTask(AppCompatActivity activity) {
+        context = activity;
+        pd = new ProgressDialog(context);
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
+        pd.setMessage(context.getResources().getString(R.string.toast_wait));
+        pd.show();
     }
 
     @Override
     protected String doInBackground(Void... params) {
         try {
 
-            //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences();
-
-            //context = params[0];
             dbHelper = new DBHelper(context);
             dbIcon = new DBIcon(context);
-            mSettings = context.getSharedPreferences(APP_PREF,Context.MODE_PRIVATE);
+            mSettings = context.getSharedPreferences(APP_PREF, Context.MODE_PRIVATE);
 
 
             city = mSettings.getString(APP_PREF_CITY, "");
 
-            if (mSettings.getString(APP_PREF_UNITS, "").equals("&units=imperial")){
+            if (mSettings.getString(APP_PREF_UNITS, "").equals("&units=imperial")) {
                 units = "&units=imperial";
-            }
-            else if (mSettings.getString(APP_PREF_UNITS, "").equals("&units=metric")){
+            } else if (mSettings.getString(APP_PREF_UNITS, "").equals("&units=metric")) {
                 units = "&units=metric";
-            }
-            else {
+            } else {
                 units = "";
             }
-            if (mSettings.getString(APP_PREF_LANG, "").equals("&lang=en")){
+            if (mSettings.getString(APP_PREF_LANG, "").equals("&lang=en")) {
                 lang = "&lang=en";
-            }
-            else {
+            } else {
                 lang = "&lang=ru";
             }
 
 
-            URL url = new URL("http://api.openweathermap.org/data/2.5/forecast?q=" + city + units + lang +  "&appid=9969e65c30d6a4788a27340c1ea4f3f6");
+            URL url = new URL("http://api.openweathermap.org/data/2.5/forecast?q=" + city + units + lang + "&appid=9969e65c30d6a4788a27340c1ea4f3f6");
 
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -145,7 +135,7 @@ public class MyTask extends AsyncTask<Void, Void, String> {
         ContentValues contentValues = new ContentValues();
         ContentValues conValues = new ContentValues();
 
-        if (mSettings.getString(APP_PREF_DB, "").equals("dbCreated")){
+        if (mSettings.getString(APP_PREF_DB, "").equals("dbCreated")) {
             database.delete(DBHelper.TABLE_WEATHER, null, null);
             iconbase.delete(DBIcon.TABLE_ICON, null, null);
             SharedPreferences.Editor editor = mSettings.edit();
@@ -172,14 +162,14 @@ public class MyTask extends AsyncTask<Void, Void, String> {
             editor.apply();
 
             for (int i = 0; i < listJsonArray.length(); i++) {
-                getData(strJson, i);
+                getDataFromJSON(strJson, i);
                 conValues.put(DBIcon.KEY_ICON, icon);
                 iconbase.insert(DBIcon.TABLE_ICON, null, conValues);
             }
 
 
             for (int i = 0; i < listJsonArray.length(); i++) {
-                getData(strJson, i);
+                getDataFromJSON(strJson, i);
                 weatherList[0] = weatherList[0].substring(8, 10) + "/" + weatherList[0].substring(5, 7) + "/" +
                         weatherList[0].substring(0, 4) + "\n" +
                         weatherList[0].substring(11, weatherList[0].length() - 3);
@@ -195,17 +185,32 @@ public class MyTask extends AsyncTask<Void, Void, String> {
             }
             dbHelper.close();
             dbIcon.close();
-        }
-        else
-        {
-            Toast.makeText(context, "incorrect city name",Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(context, "incorrect city name", Toast.LENGTH_SHORT).show();
 
         }
+
         dbHelper.close();
         dbIcon.close();
 
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        if (pd.isShowing()) {
+            pd.dismiss();
+            Toast toast = Toast.makeText(context, R.string.toast_done, Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+
+        }
+
+
     }
-    public void getData (String str, int value){
+
+    private void getDataFromJSON(String str, int value) {
         try {
             dataJsonObj = new JSONObject(str);
             dataCity = dataJsonObj.getJSONObject("city");
@@ -232,19 +237,17 @@ public class MyTask extends AsyncTask<Void, Void, String> {
             wind_speed = dataWindJsonObj.getString("speed");
 
             weatherList[0] = dt_txt;
-            weatherList[1] = description;
+
 
             String units = mSettings.getString(APP_PREF_UNITS, "");
-            if (units == "&units=imperial"){
-                weatherList[2] = jsonWeather_temp + " ºF";
+            if (units == "&units=imperial") {
+                weatherList[1] = jsonWeather_temp + " ºF";
+            } else if (units == "&units=metric") {
+                weatherList[1] = jsonWeather_temp + " ºC";
+            } else {
+                weatherList[1] = jsonWeather_temp + " ºK";
             }
-            else if (units == "&units=metric"){
-                weatherList[2] = jsonWeather_temp + " ºC";
-            }
-            else {
-                weatherList[2] = jsonWeather_temp + " ºK";
-            }
-            //weatherList[2] = jsonWeather_temp + " ºC";
+            weatherList[2] = description;
             weatherList[3] = humidity;
             weatherList[4] = pressure;
             weatherList[5] = wind_speed + " m/s";
@@ -254,6 +257,8 @@ public class MyTask extends AsyncTask<Void, Void, String> {
         }
 
     }
+
+
 }
 
 

@@ -10,7 +10,7 @@ import android.os.Bundle;
 public class DetailsActivity extends AppCompatActivity {
 
     private boolean isTablet;
-    int position;
+    private int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,11 +26,16 @@ public class DetailsActivity extends AppCompatActivity {
 
         String string = getIntent().getStringExtra("ITEM_POSITION");
         position = Integer.valueOf(string);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        DetailsFragment fragment = new DetailsFragment(position);
-        fragmentTransaction.replace(R.id.fr_det, fragment);
-        fragmentTransaction.commit();
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fr_det, new DetailsFragment(position))
+                .commit();
+
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        DetailsFragment fragment = new DetailsFragment(position);
+//        fragmentTransaction.replace(R.id.fr_det, fragment);
+//        fragmentTransaction.commit();
 
 
     }

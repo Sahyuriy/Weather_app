@@ -21,4 +21,7 @@
     <string name="DB">База данных:</string>
     <string name="btnClear">Очистка</string>
     <string name="toast_l">Нажмите поиск</string>
+    <string name="toast_done">Выполнено</string>
+
+
 </resources>

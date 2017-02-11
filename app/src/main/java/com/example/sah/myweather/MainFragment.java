@@ -21,8 +21,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.sah.myweather.DB.DBHelper;
-import com.example.sah.myweather.DB.DBIcon;
+import com.example.sah.myweather.db.DBHelper;
+import com.example.sah.myweather.db.DBIcon;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -140,7 +140,7 @@ public class MainFragment extends Fragment {
 
         tvTime.setText(recList[0]);
         tvTemp.setText(recList[1]);
-        tvDescr.setText(recList[2]);
+        //tvDescr.setText(recList[2]);
         tvCityName.setText(mSettings.getString(APP_PREF_CITY, ""));
         String iconName = (iconItems.get(0));
         Picasso.with(getContext()).load("http://openweathermap.org/img/w/" + iconName + ".png").into(iv_icon);

@@ -1,53 +1,50 @@
 package com.example.sah.myweather;
 
 import android.annotation.TargetApi;
+
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.media.audiofx.BassBoost;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.sah.myweather.DB.DBHelper;
-import com.example.sah.myweather.DB.DBIcon;
-
-import java.util.Locale;
+import com.example.sah.myweather.db.DBHelper;
+import com.example.sah.myweather.db.DBIcon;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
 
-    SharedPreferences mSettings;
+
     public static final String APP_PREF = "mysettings";
     public static final String APP_PREF_DB = "database";
     public static final String APP_PREF_LANG = "language";
-    DBHelper dbHelper;
-    DBIcon dbIcon;
-    String lang;
     private boolean isTablet;
+    private DBHelper dbHelper;
+    private DBIcon dbIcon;
+    private String lang;
+    private SharedPreferences mSettings;
+    private DrawerLayout drawer;
+    private ProgressDialog pd;
+    private Toolbar toolbar;
 
-
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         isTablet = getResources().getBoolean(R.bool.isTablet);
         if (isTablet) {
@@ -56,11 +53,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.getBackground().setAlpha(125);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(drawerToggle);
         drawerToggle.syncState();
@@ -68,16 +65,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        dbHelper = new DBHelper(this);
+        dbIcon = new DBIcon(this);
         mSettings = getSharedPreferences(APP_PREF, Context.MODE_PRIVATE);
 
 
         if (mSettings.getString(APP_PREF_DB, "").equals("dbCreated")){
 
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            MainFragment fragment = new MainFragment();
-            fragmentTransaction.replace(R.id.fragm, fragment);
-            fragmentTransaction.commit();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragm, new MainFragment())
+                    .commit();
 
         }
         else {
@@ -85,8 +82,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent in = new Intent(MainActivity.this, SettingsActivity.class);
             startActivityForResult(in, 1);
         }
-
-
 
     }
 
@@ -105,17 +100,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Toast.makeText(this, "No internet connection", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    new MyTask(getApplicationContext()).execute();
-                    dbHelper = new DBHelper(this);
-                    dbIcon = new DBIcon(this);
-                    FragmentManager fragmentManager = getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    MainFragment fragment = new MainFragment();
-                    fragmentTransaction.replace(R.id.fragm, fragment);
-                    fragmentTransaction.commit();
+                    new MyTask(MainActivity. this).execute();
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragm, new MainFragment())
+                            .commit();
                 }
-
-
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -134,8 +123,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             finishAffinity();
         }
 
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -144,21 +131,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            MainFragment fragment = new MainFragment();
-            fragmentTransaction.replace(R.id.fragm, fragment);
-            fragmentTransaction.commit();
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragm, new MainFragment())
+                    .commit();
 
         }
     }
 
-
-
-
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -177,8 +159,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null;
     }
-
-
 
 
 }

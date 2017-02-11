@@ -12,8 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.sah.myweather.DB.DBHelper;
-import com.example.sah.myweather.DB.DBIcon;
+import com.example.sah.myweather.db.DBHelper;
+import com.example.sah.myweather.db.DBIcon;
 
 import java.util.ArrayList;
 

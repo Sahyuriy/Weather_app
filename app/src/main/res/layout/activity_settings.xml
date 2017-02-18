@@ -69,7 +69,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:orientation="vertical">
 
             <TextView
@@ -84,18 +84,24 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
                 <Button
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/btn"
                     android:id="@+id/btn_kel"
                     android:text="@string/unit_kelvin"
                     android:layout_marginLeft="@dimen/lay_marg"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/lay_marg" />
                 <Button
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/btn"
                     android:id="@+id/btn_cel"
                     android:text="@string/unit_celsius"
                     android:layout_marginLeft="@dimen/lay_marg"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/lay_marg" />
                 <Button
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/btn"
                     android:id="@+id/btn_far"
                     android:text="@string/unit_fahrenheit"
                     android:layout_marginLeft="@dimen/lay_marg"
@@ -104,33 +110,7 @@
 
 
             </LinearLayout>
-            <!--<RadioGroup-->
-                <!--android:id="@+id/rg"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content">-->
 
-                <!--<RadioButton-->
-                    <!--android:id="@+id/rb_kel"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="@string/unit_kelvin"-->
-                    <!--android:textSize="@dimen/textSize" />-->
-
-                <!--<RadioButton-->
-                    <!--android:id="@+id/rb_cel"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="@string/unit_celsius"-->
-                    <!--android:textSize="@dimen/textSize" />-->
-
-                <!--<RadioButton-->
-                    <!--android:id="@+id/rb_far"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="@string/unit_fahrenheit"-->
-                    <!--android:textSize="@dimen/textSize" />-->
-
-            <!--</RadioGroup>-->
 
         </LinearLayout>
         <TextView
@@ -160,24 +140,6 @@
 
 
         </LinearLayout>
-        <!--<TextView-->
-            <!--android:layout_marginTop="@dimen/lay_mar"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="center_vertical"-->
-            <!--android:text="@string/units_format"-->
-            <!--android:textColor="#000000"-->
-            <!--android:textSize="18sp" />-->
-
     </LinearLayout>
 </ScrollView>
-    <!--<Button-->
-        <!--android:id="@+id/btnAdd"-->
-        <!--style="@style/TextColor"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:background="@drawable/round"-->
-        <!--android:text="@string/btn_save" />-->
-
 </RelativeLayout>

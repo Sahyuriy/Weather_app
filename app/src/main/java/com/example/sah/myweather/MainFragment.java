@@ -91,7 +91,6 @@ public class MainFragment extends Fragment {
         dbCreated = mSettings.getString(APP_PREF_DB, "");
         dbHelper = new DBHelper(getContext());
         dbIcon = new DBIcon(getContext());
-        //getContent();
         if (dbCreated.equals("dbCreated")){
 
             getContent();

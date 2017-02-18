@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -100,7 +101,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Toast.makeText(this, "No internet connection", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    new MyTask(MainActivity. this).execute();
+                    MyTask myTask = new MyTask(MainActivity. this);
+                    myTask.execute();
+
+//                    while(myTask.getStatus()!= AsyncTask.Status.FINISHED)
+//                    while(myTask.getStatus().equals( AsyncTask.Status.RUNNING))
+//                    {
+//                        try {
+//                            Thread.sleep(10);
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.fragm, new MainFragment())
                             .commit();

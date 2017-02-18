@@ -90,7 +90,7 @@ public class MyTask extends AsyncTask<Void, Void, String> {
                 units = "&units=imperial";
             } else if (mSettings.getString(APP_PREF_UNITS, "").equals("&units=metric")) {
                 units = "&units=metric";
-            } else {
+            } else if (mSettings.getString(APP_PREF_UNITS, "").equals("")){
                 units = "";
             }
             if (mSettings.getString(APP_PREF_LANG, "").equals("&lang=en")) {
@@ -98,7 +98,7 @@ public class MyTask extends AsyncTask<Void, Void, String> {
             } else {
                 lang = "&lang=ru";
             }
-
+            //city= "London";
 
             URL url = new URL("http://api.openweathermap.org/data/2.5/forecast?q=" + city + units + lang + "&appid=9969e65c30d6a4788a27340c1ea4f3f6");
 

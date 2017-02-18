@@ -13,8 +13,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.sah.myweather.db.DBHelper;
@@ -139,7 +137,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                         new MyTask(SettingsActivity.this).execute();
                         Intent intent = new Intent();
                         setResult(RESULT_OK, intent);
-
                     }
                 }
             }

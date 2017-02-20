@@ -21,14 +21,12 @@ import java.util.ArrayList;
 public class DetailsFragment extends Fragment {
 
 
-    ArrayList<String> item = new ArrayList<>();
-    RecyclerView rvDetails;
-    DBHelper dbHelp;
-    DBIcon dbIcon;
-    int position;
-    String[] weatherList = new String[6];
-    String icon;
-    private boolean isTablet;
+    private RecyclerView rvDetails;
+    private DBHelper dbHelp;
+    private DBIcon dbIcon;
+    private int position;
+    private String[] weatherList = new String[6];
+    private String icon;
 
 
     public DetailsFragment(int pos) {
@@ -51,8 +49,6 @@ public class DetailsFragment extends Fragment {
 
         dbHelp = new DBHelper(getContext());
         dbIcon = new DBIcon(getContext());
-        //String string = getActivity().getIntent().getStringExtra("ITEM_POSITION");
-        //position = Integer.valueOf(string);
         details();
 
 
@@ -73,7 +69,7 @@ public class DetailsFragment extends Fragment {
     }
 
 
-    public void details() {
+    private void details() {
         SQLiteDatabase database = dbHelp.getReadableDatabase();
         SQLiteDatabase iconbase = dbIcon.getReadableDatabase();
         Cursor cursor = database.query(DBHelper.TABLE_WEATHER, null, null, null, null, null, null);

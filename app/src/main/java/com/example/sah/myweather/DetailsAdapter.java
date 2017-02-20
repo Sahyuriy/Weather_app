@@ -16,9 +16,9 @@ public class DetailsAdapter extends RecyclerView.Adapter<DetailsAdapter.MyViewHo
     public static final String ICON_URL = "http://openweathermap.org/img/w/";
 
     private OnItemClickListener onItemClickListener;
-    String[] data;
-    Context context;
-    String iconName;
+    private String[] data;
+    private Context context;
+    private String iconName;
 
 
 

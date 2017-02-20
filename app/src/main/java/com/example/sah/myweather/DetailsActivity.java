@@ -31,12 +31,6 @@ public class DetailsActivity extends AppCompatActivity {
                 .replace(R.id.fr_det, new DetailsFragment(position))
                 .commit();
 
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//        DetailsFragment fragment = new DetailsFragment(position);
-//        fragmentTransaction.replace(R.id.fr_det, fragment);
-//        fragmentTransaction.commit();
-
 
     }
 

@@ -18,9 +18,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     public static final String ICON_URL = "http://openweathermap.org/img/w/";
 
     private OnItemClickListener onItemClickListener;
-    ArrayList<String> data;
-    ArrayList<String> dataIcon;
-    Context context;
+    private ArrayList<String> data;
+    private ArrayList<String> dataIcon;
+    private Context context;
 
 
     public MyAdapter (ArrayList<String> strings, ArrayList<String> icons){

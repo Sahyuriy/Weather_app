@@ -30,27 +30,26 @@ import java.util.ArrayList;
 
 public class MainFragment extends Fragment {
 
-
-    RecyclerView recyclerView;
-    DBHelper dbHelper;
-    DBIcon dbIcon;
-    int ke = 0;
-    String[] recList = new String[6];
-    ArrayList<String> items = new ArrayList<>();
-    ArrayList<String> iconItems = new ArrayList<>();
-
-    TextView tvTime;
-    ImageView iv_icon;
-    TextView tvTemp;
-    TextView tvDescr;
-    TextView tvCityName;
-    private boolean isTablet;
-    SharedPreferences mSettings;
     public static final String APP_PREF = "mysettings";
     public static final String APP_PREF_UNITS = "units_format";
     public static final String APP_PREF_CITY = "cityname";
     public static final String APP_PREF_DB = "database";
-    String dbCreated;
+    private RecyclerView recyclerView;
+    private DBHelper dbHelper;
+    private DBIcon dbIcon;
+    private int ke = 0;
+    private String[] recList = new String[6];
+    private ArrayList<String> items = new ArrayList<>();
+    private ArrayList<String> iconItems = new ArrayList<>();
+
+    private TextView tvTime;
+    private ImageView iv_icon;
+    private TextView tvTemp;
+    private TextView tvDescr;
+    private TextView tvCityName;
+    private boolean isTablet;
+    private SharedPreferences mSettings;
+    private String dbCreated;
 
 
     public MainFragment() {
@@ -70,15 +69,12 @@ public class MainFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
 
-
         recyclerView = (RecyclerView) view.findViewById(R.id.rvItem);
         tvTime = (TextView) view.findViewById(R.id.tvTime);
         iv_icon = (ImageView) view.findViewById(R.id.iv_image);
         tvTemp = (TextView) view.findViewById(R.id.tvTemp);
         tvDescr = (TextView) view.findViewById(R.id.tvDescr);
         tvCityName = (TextView) view.findViewById(R.id.tvCityName);
-
-
 
 
     }
@@ -91,22 +87,20 @@ public class MainFragment extends Fragment {
         dbCreated = mSettings.getString(APP_PREF_DB, "");
         dbHelper = new DBHelper(getContext());
         dbIcon = new DBIcon(getContext());
-        if (dbCreated.equals("dbCreated")){
+        if (dbCreated.equals("dbCreated")) {
 
             getContent();
 
-        }
-        else {
+        } else {
             Toast.makeText(getContext(), "Database is empty", Toast.LENGTH_SHORT).show();
         }
-
 
 
     }
 
     public void getContent() {
 
-        ke=0;
+        ke = 0;
         SQLiteDatabase database = dbHelper.getWritableDatabase();
         SQLiteDatabase iconbase = dbIcon.getWritableDatabase();
 
@@ -121,7 +115,7 @@ public class MainFragment extends Fragment {
                 items.add(String.valueOf(cursor.getString(time)));
             } while (cursor.moveToNext());
         } else
-            Log.d("mLog","0 rows");
+            Log.d("mLog", "0 rows");
 
         cursorIcon.moveToFirst();
         for (int i = 0; i < ke; i++) {
@@ -154,27 +148,24 @@ public class MainFragment extends Fragment {
             @Override
             public void OnItemClick(int position) {
 
-                if (isTablet){
+                if (isTablet) {
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     DetailsFragment fragment = new DetailsFragment(position);
                     fragmentTransaction.replace(R.id.fragm_det, fragment);
                     fragmentTransaction.commit();
 
-                }
-                else {
+                } else {
                     String str = String.valueOf(position);
-                    Intent intent = new Intent(getContext(),DetailsActivity.class);
+                    Intent intent = new Intent(getContext(), DetailsActivity.class);
                     intent.putExtra("ITEM_POSITION", str);
                     startActivity(intent);
                 }
 
 
-
             }
         });
     }
-
 
 
 }
